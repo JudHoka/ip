@@ -1,6 +1,17 @@
 import java.util.Scanner;
 
 public class Atom {
+    static String[] list = new String[100];
+    static int index = 0;
+
+    public static void printList() {
+        System.out.println("____________________________________________________________");
+        for (int i = 1; i <= index; i++) {
+            System.out.println(i + ". " + list[i-1]);
+        }
+        System.out.println("____________________________________________________________");
+    }
+
     public static void main(String[] args) {
         String logo = "    ____     _                        /\\    \n"
                 + "   / __ \\   | |__   ____   __  __  \\ /  \\ /  \n"
@@ -19,13 +30,17 @@ public class Atom {
             Scanner in = new Scanner(System.in);
             String line = in.nextLine();
 
-            if(line.equals("bye")){
+            if (line.equals("list")) {
+                printList();
+            } else if (line.equals("bye")) {
                 break;
+            } else {
+                System.out.println("____________________________________________________________");
+                System.out.println("Added: " + line);
+                list[index] = line;
+                index++;
+                System.out.println("____________________________________________________________");
             }
-
-            System.out.println("____________________________________________________________");
-            System.out.println(line);
-            System.out.println("____________________________________________________________");
         }
 
         System.out.println("____________________________________________________________");
