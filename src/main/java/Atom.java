@@ -38,12 +38,11 @@ public class Atom {
 
                 if (words.length > 1 && words[1].matches("\\d+")) {
                     int counter = Integer.parseInt(words[1]);
-                    if(counter > index){
+                    if (counter > index) {
                         System.out.println("____________________________________________________________");
                         System.out.println("Number request too large, please try again...");
                         System.out.println("____________________________________________________________");
-                    }
-                    else {
+                    } else {
                         list[counter - 1].setMark(true);
                         System.out.println("____________________________________________________________");
                         System.out.println("Awesome! I've marked this task as done:");
@@ -61,12 +60,11 @@ public class Atom {
 
                 if (check.length > 1 && check[1].matches("\\d+")) {
                     int counter = Integer.parseInt(check[1]);
-                    if(counter > index){
+                    if (counter > index) {
                         System.out.println("____________________________________________________________");
                         System.out.println("Number request too large, please try again...");
                         System.out.println("____________________________________________________________");
-                    }
-                    else {
+                    } else {
                         list[counter - 1].setMark(false);
                         System.out.println("____________________________________________________________");
                         System.out.println("Alright, So then this task is marked as not done yet:");
