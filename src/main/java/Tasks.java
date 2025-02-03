@@ -11,18 +11,18 @@ public class Tasks {
         }
     }
 
+    public Tasks(String name, String category) {
+        this.name = name;
+        this.mark = false;
+        this.category = category;
+    }
+
     public void setMark(boolean mark) {
         this.mark = mark;
     }
 
     public String getName() {
         return name;
-    }
-
-    public Tasks(String name, String category) {
-        this.name = name;
-        this.mark = false;
-        this.category = category;
     }
 
     public String getCategory() {
