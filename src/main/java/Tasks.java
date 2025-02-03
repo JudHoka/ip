@@ -1,12 +1,12 @@
 public class Tasks {
-    private String name;
+    protected String name;
     private boolean mark;
+    protected String category;
 
     public String marked() {
-        if(mark){
+        if (mark) {
             return "X";
-        }
-        else{
+        } else {
             return " ";
         }
     }
@@ -19,8 +19,13 @@ public class Tasks {
         return name;
     }
 
-    public Tasks(String name) {
+    public Tasks(String name, String category) {
         this.name = name;
         this.mark = false;
+        this.category = category;
+    }
+
+    public String getCategory() {
+        return category;
     }
 }
