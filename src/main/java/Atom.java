@@ -4,21 +4,35 @@ public class Atom {
     private static final int MAX_TASKS = 100;
     private static final String LINE_SEPARATOR = "  ____________________________________________________________";
 
-    static String LOGO = """
+    private static final String LOGO = """
                 ____     _                        /\\   \s
                / __ \\   | |__   ____   __  __  \\ /  \\ / \s
               / /__\\ \\  |  __| / __ \\ |  \\/  | <      >\s
              / /    \\ \\ | |___| |__| || |\\/| | / \\  / \\ \s
             /_/      \\_\\ \\____|\\____/ |_|  |_|    \\/   \s
             """;
-    static Tasks[] list = new Tasks[MAX_TASKS];
-    static int taskCount = 0;
+    private static Tasks[] taskList = new Tasks[MAX_TASKS];
+    private static int taskCount = 0;
 
-    public static boolean isValidTaskCommand(String line) {
+    private static boolean isValidTaskCommand(String line) {
         return line.startsWith("todo ") || line.startsWith("deadline ") || line.startsWith("event ");
     }
 
-    public static void createTask(String line) {
+    private static void addTaskToList(Tasks task) {
+        if (taskCount >= MAX_TASKS) {
+            printErrorMessage("Task list is full! Cannot add more tasks.");
+            return;
+        }
+
+        taskList[taskCount] = task;
+        taskCount++;
+
+        System.out.println("    Nice! I've added this task:");
+        printTask(taskCount);
+        System.out.println("    Now you have " + taskCount + " tasks in the list.");
+    }
+
+    private static void createTask(String line) {
         if (line.startsWith("todo ")) {
             createTodo(line);
         } else if (line.startsWith("deadline ")) {
@@ -28,19 +42,14 @@ public class Atom {
         }
     }
 
-    public static void createTodo(String line) {
+    private static void createTodo(String line) {
         String taskDescription = line.substring(5).trim();
 
         if (taskDescription.isEmpty()) {
             System.out.println("    Sorry! The description of a 'todo' cannot be empty.");
         } else {
-            Tasks newTask = new Todo(taskDescription);
-            list[taskCount] = newTask;
-            taskCount++;
-
-            System.out.println("    Nice mate! I've added this task: ");
-            System.out.println("      [" + newTask.getCategory() + "][" + newTask.marked() + "] " + newTask.getName());
-            System.out.println("    Now you have " + taskCount + " tasks in the list.");
+            Todo newTask = new Todo(taskDescription);
+            addTaskToList(newTask);
         }
     }
 
@@ -60,12 +69,7 @@ public class Atom {
                 String deadline = parts[1].trim();
 
                 Deadlines newTask = new Deadlines(taskDescription, deadline);
-                list[taskCount] = newTask;
-                taskCount++;
-
-                System.out.println("    Nice mate! I've added this task: ");
-                System.out.println("      [" + newTask.getCategory() + "][" + newTask.marked() + "] " + newTask.getName() + " (by: " + newTask.getBy() + ")");
-                System.out.println("    Now you have " + taskCount + " tasks in the list.");
+                addTaskToList(newTask);
             }
         }
     }
@@ -87,12 +91,7 @@ public class Atom {
                 String to = parts[2].trim();
 
                 Events newTask = new Events(taskDescription, from, to);
-                list[taskCount] = newTask;
-                taskCount++;
-
-                System.out.println("    Nice mate! I've added this task: ");
-                System.out.println("      [" + newTask.getCategory() + "][" + newTask.marked() + "] " + newTask.getName() + " (from: " + newTask.getFrom() + " to: " + newTask.getTo() + ")");
-                System.out.println("    Now you have " + taskCount + " tasks in the list.");
+                addTaskToList(newTask);
             }
         }
     }
@@ -111,7 +110,7 @@ public class Atom {
             return;
         }
 
-        list[taskNum - 1].setMark(markStatus);
+        taskList[taskNum - 1].setMark(markStatus);
         System.out.println(LINE_SEPARATOR);
         System.out.println("    " + (markStatus ? "Awesome! this task is marked as done" : "Alright, this task has been unmarked") + ":");
         printTask(taskNum);
@@ -120,11 +119,11 @@ public class Atom {
     }
 
     public static void printTask(int TaskNumber) {
-        System.out.print("    " + TaskNumber + ".[" + list[TaskNumber - 1].category + "][" + list[TaskNumber - 1].marked() + "] " + list[TaskNumber - 1].getName());
-        if (list[TaskNumber - 1].getCategory().equals("D")) {
-            System.out.println(" (by: " + ((Deadlines) list[TaskNumber - 1]).getBy() + ")");
-        } else if (list[TaskNumber - 1].getCategory().equals("E")) {
-            System.out.println(" (from: " + ((Events) list[TaskNumber - 1]).getFrom() + " to: " + ((Events) list[TaskNumber - 1]).getTo() + ")");
+        System.out.print("    " + TaskNumber + ".[" + taskList[TaskNumber - 1].category + "][" + taskList[TaskNumber - 1].marked() + "] " + taskList[TaskNumber - 1].getName());
+        if (taskList[TaskNumber - 1].getCategory().equals("D")) {
+            System.out.println(" (by: " + ((Deadlines) taskList[TaskNumber - 1]).getBy() + ")");
+        } else if (taskList[TaskNumber - 1].getCategory().equals("E")) {
+            System.out.println(" (from: " + ((Events) taskList[TaskNumber - 1]).getFrom() + " to: " + ((Events) taskList[TaskNumber - 1]).getTo() + ")");
         } else {
             System.out.println();
         }
