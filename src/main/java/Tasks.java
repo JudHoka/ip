@@ -1,5 +1,5 @@
 public class Tasks {
-    protected String name;
+    protected String task;
     private boolean mark;
     protected String category;
 
@@ -12,7 +12,7 @@ public class Tasks {
     }
 
     public Tasks(String name, String category) {
-        this.name = name;
+        this.task = name;
         this.mark = false;
         this.category = category;
     }
@@ -22,7 +22,7 @@ public class Tasks {
     }
 
     public String getName() {
-        return name;
+        return task;
     }
 
     public String getCategory() {
