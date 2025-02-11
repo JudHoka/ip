@@ -1,3 +1,5 @@
+package atom.ui;
+
 public class AtomException {
     public static void notImplemented() {
         Atom.printMessageWithLineSeperator("Sorry, I don't understand what you're trying to say...");
