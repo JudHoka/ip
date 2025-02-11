@@ -8,7 +8,7 @@ public class AtomException {
     }
 
     public static void taskArrayFull() {
-        Atom.printMessageWithLineSeperator("Task list is full! Cannot add more tasks.");
+        Atom.printMessageWithLineSeperator("Task list is full! You can't add more tasks.");
     }
 
     public static void taskMissingDesc(String task) {

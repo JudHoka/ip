@@ -110,7 +110,7 @@ public class Atom {
 
         taskList[taskNum - 1].setMark(markStatus);
         System.out.println(LINE_SEPARATOR);
-        System.out.println("    " + (markStatus ? "Awesome! this task is marked as done" : "Alright, this task has been unmarked") + ":");
+        System.out.println("    " + (markStatus ? "Awesome! I've marked this task as done" : "Alright, this task has been unmarked") + ":");
         printTask(taskNum);
         System.out.println(LINE_SEPARATOR);
 
@@ -134,7 +134,7 @@ public class Atom {
             return;
         }
         System.out.println(LINE_SEPARATOR);
-        System.out.println("    Here are all the tasks in your list:");
+        System.out.println("    Below will be the tasks in your list:");
         for (int i = 1; i <= taskCount; i++) {
             printTask(i);
         }
@@ -171,8 +171,8 @@ public class Atom {
 
     public static void main(String[] args) {
         System.out.println("Hello from\n" + LOGO);
-        printMessageWithLineSeperator("Hey hey there! Its your favourite chatbot assistant, Atom :D\n" +
-                "    Is there anything I can help you with?");
+        printMessageWithLineSeperator("Hey hey there! Its your favourite chatbot assistant, Atom! :D\n" +
+                "    Is there anything I can help you with? Just let me know.");
         while (true) {
 
             String line = receiveInput();
@@ -183,6 +183,6 @@ public class Atom {
             processCommand(line);
         }
 
-        printMessageWithLineSeperator("Alright, I'll see ya next time!");
+        printMessageWithLineSeperator("Alright, I'll catch ya next time, Have a nice day!");
     }
 }
