@@ -20,7 +20,7 @@ public class Atom {
 
     private static void addTaskToList(Tasks task) {
         if (taskCount >= MAX_TASKS) {
-            printErrorMessage("Task list is full! Cannot add more tasks.");
+            AtomException.taskArrayFull();
             return;
         }
 
@@ -46,7 +46,7 @@ public class Atom {
         String taskDescription = line.substring(5).trim();
 
         if (taskDescription.isEmpty()) {
-            System.out.println("    Sorry! The description of a 'todo' cannot be empty.");
+            AtomException.taskMissingDesc("t");
         } else {
             Todo newTask = new Todo(taskDescription);
             addTaskToList(newTask);
@@ -57,13 +57,12 @@ public class Atom {
         String trimmedLine = line.substring(9).trim();
 
         if (trimmedLine.isEmpty()) {
-            System.out.println("    Sorry! The description of a 'deadline' cannot be empty.");
+            AtomException.taskMissingDesc("d");
         } else {
             String[] parts = trimmedLine.split(" /by ", 2);
 
             if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                System.out.println("    Sorry, I don't understand what you're trying to say, please specify more... \n" +
-                        "    (deadline 'activity' '/by' 'deadline time')");
+                AtomException.taskIncomplete("d");
             } else {
                 String taskDescription = parts[0].trim();
                 String deadline = parts[1].trim();
@@ -78,13 +77,12 @@ public class Atom {
         String trimmedLine = line.substring(6).trim();
 
         if (trimmedLine.isEmpty()) {
-            System.out.println("    Sorry! The description of an 'event' cannot be empty.");
+            AtomException.taskMissingDesc("e");
         } else {
             String[] parts = trimmedLine.split(" /from | /to ", 3);
 
             if (parts.length < 3 || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
-                System.out.println("    Sorry, I don't understand what you're trying to say, please specify more... \n" +
-                        "    (event 'activity' '/from' 'start time' '/to' 'end time')");
+                AtomException.taskIncomplete("e");
             } else {
                 String taskDescription = parts[0].trim();
                 String from = parts[1].trim();
@@ -100,19 +98,19 @@ public class Atom {
         String[] words = line.split(" ");
 
         if (words.length < 2 || !words[1].matches("\\d+")) {
-            printErrorMessage("Command must be followed by a valid task number.");
+            AtomException.markError("no number");
             return;
         }
 
         int taskNum = Integer.parseInt(words[1]);
         if (taskNum > taskCount) {
-            printErrorMessage("Task number too large, please try again...");
+            AtomException.markError("out of bounds");
             return;
         }
 
         taskList[taskNum - 1].setMark(markStatus);
         System.out.println(LINE_SEPARATOR);
-        System.out.println("    " + (markStatus ? "Awesome! this task is marked as done" : "Alright, this task has been unmarked") + ":");
+        System.out.println("    " + (markStatus ? "Awesome! I've marked this task as done" : "Alright, this task has been unmarked") + ":");
         printTask(taskNum);
         System.out.println(LINE_SEPARATOR);
 
@@ -131,15 +129,19 @@ public class Atom {
     }
 
     public static void printList() {
+        if (taskCount == 0) {
+            AtomException.taskEmpty();
+            return;
+        }
         System.out.println(LINE_SEPARATOR);
-        System.out.println("    Here are all the tasks in your list:");
+        System.out.println("    Below will be the tasks in your list:");
         for (int i = 1; i <= taskCount; i++) {
             printTask(i);
         }
         System.out.println(LINE_SEPARATOR);
     }
 
-    public static void printErrorMessage(String message) {
+    public static void printMessageWithLineSeperator(String message) {
         System.out.println(LINE_SEPARATOR);
         System.out.println("    " + message);
         System.out.println(LINE_SEPARATOR);
@@ -157,21 +159,23 @@ public class Atom {
             createTask(line);
             System.out.println(LINE_SEPARATOR);
         } else {
-            printErrorMessage("Sorry, I don't understand what you're trying to say...");
+            AtomException.notImplemented();
         }
+    }
+
+    public static String receiveInput() {
+        System.out.println();
+        Scanner in = new Scanner(System.in);
+        return in.nextLine();
     }
 
     public static void main(String[] args) {
         System.out.println("Hello from\n" + LOGO);
-        System.out.println(LINE_SEPARATOR);
-        System.out.println("    Hey hey there! Its your favourite chatbot assistant, Atom :D");
-        System.out.println("    Is there anything I can help you with?");
-        System.out.println(LINE_SEPARATOR);
-
+        printMessageWithLineSeperator("Hey hey there! Its your favourite chatbot assistant, Atom! :D\n" +
+                "    Is there anything I can help you with? Just let me know.");
         while (true) {
-            System.out.println();
-            Scanner in = new Scanner(System.in);
-            String line = in.nextLine();
+
+            String line = receiveInput();
 
             if (line.equals("bye")) {
                 break;
@@ -179,9 +183,6 @@ public class Atom {
             processCommand(line);
         }
 
-        System.out.println(LINE_SEPARATOR);
-        System.out.println("    Alright, I'll see ya next time!");
-        System.out.println(LINE_SEPARATOR);
-
+        printMessageWithLineSeperator("Alright, I'll catch ya next time, Have a nice day!");
     }
 }
