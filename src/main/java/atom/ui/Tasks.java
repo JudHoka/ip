@@ -1,9 +1,11 @@
 package atom.ui;
 
-public class Tasks {
+public abstract class Tasks {
     protected String task;
-    private boolean mark;
+    protected boolean mark;
     protected String category;
+
+    public abstract String toFileFormat();
 
     public String marked() {
         if (mark) {
@@ -13,9 +15,10 @@ public class Tasks {
         }
     }
 
-    public Tasks(String name, String category) {
+    public Tasks(String name, String category, boolean mark
+    ) {
         this.task = name;
-        this.mark = false;
+        this.mark = mark;
         this.category = category;
     }
 

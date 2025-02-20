@@ -76,6 +76,7 @@ public class Atom {
         System.out.println("    Now you have " + taskList.size() + " tasks in the list.");
         System.out.println(LINE_SEPARATOR);
 
+        Storage.saveTasks(taskList);
     }
 
     private static void createTask(String line) {
@@ -95,6 +96,7 @@ public class Atom {
             AtomException.taskMissingDesc("t");
         } else {
             Todo newTask = new Todo(taskDescription);
+            Todo newTask = new Todo(taskDescription, false);
             addTaskToList(newTask);
         }
     }
@@ -113,7 +115,7 @@ public class Atom {
                 String taskDescription = parts[0].trim();
                 String deadline = parts[1].trim();
 
-                Deadlines newTask = new Deadlines(taskDescription, deadline);
+                Deadlines newTask = new Deadlines(taskDescription, deadline, false);
                 addTaskToList(newTask);
             }
         }
@@ -134,7 +136,7 @@ public class Atom {
                 String from = parts[1].trim();
                 String to = parts[2].trim();
 
-                Events newTask = new Events(taskDescription, from, to);
+                Events newTask = new Events(taskDescription, from, to, false);
                 addTaskToList(newTask);
             }
         }
@@ -148,6 +150,7 @@ public class Atom {
         }
 
         taskList.get(taskNum - 1).setMark(markStatus);
+        Storage.saveTasks(taskList);
         System.out.println(LINE_SEPARATOR);
         System.out.println("    " + (markStatus ? "Awesome! I've marked this task as done" : "Alright, this task has been unmarked") + ":");
         printTask(taskNum);
@@ -214,6 +217,9 @@ public class Atom {
         System.out.println("Hello from\n" + LOGO);
         printMessageWithLineSeperator("Hey hey there! Its your favourite chatbot assistant, Atom! :D\n" +
                 "    Is there anything I can help you with? Just let me know.");
+
+        Storage.loadTasks();
+
         while (true) {
 
             String line = receiveInput();
