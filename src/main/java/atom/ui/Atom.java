@@ -3,7 +3,7 @@ package atom.ui;
 import java.util.Scanner;
 
 public class Atom {
-    private static final int MAX_TASKS = 100;
+    public static final int MAX_TASKS = 100;
     private static final String LINE_SEPARATOR = "  ____________________________________________________________";
 
     private static final String LOGO = """
@@ -13,8 +13,8 @@ public class Atom {
              / /    \\ \\ | |___| |__| || |\\/| | / \\  / \\ \s
             /_/      \\_\\ \\____|\\____/ |_|  |_|    \\/   \s
             """;
-    private static Tasks[] taskList = new Tasks[MAX_TASKS];
-    private static int taskCount = 0;
+    public static Tasks[] taskList = new Tasks[MAX_TASKS];
+    public static int taskCount = 0;
 
     private static boolean isValidTaskCommand(String line) {
         return line.startsWith("todo ") || line.startsWith("deadline ") || line.startsWith("event ");
@@ -32,6 +32,8 @@ public class Atom {
         System.out.println("    Nice! I've added this task:");
         printTask(taskCount);
         System.out.println("    Now you have " + taskCount + " tasks in the list.");
+
+        Storage.saveTasks(taskList);
     }
 
     private static void createTask(String line) {
@@ -50,7 +52,7 @@ public class Atom {
         if (taskDescription.isEmpty()) {
             AtomException.taskMissingDesc("t");
         } else {
-            Todo newTask = new Todo(taskDescription);
+            Todo newTask = new Todo(taskDescription, false);
             addTaskToList(newTask);
         }
     }
@@ -69,7 +71,7 @@ public class Atom {
                 String taskDescription = parts[0].trim();
                 String deadline = parts[1].trim();
 
-                Deadlines newTask = new Deadlines(taskDescription, deadline);
+                Deadlines newTask = new Deadlines(taskDescription, deadline, false);
                 addTaskToList(newTask);
             }
         }
@@ -90,7 +92,7 @@ public class Atom {
                 String from = parts[1].trim();
                 String to = parts[2].trim();
 
-                Events newTask = new Events(taskDescription, from, to);
+                Events newTask = new Events(taskDescription, from, to, false);
                 addTaskToList(newTask);
             }
         }
@@ -111,6 +113,7 @@ public class Atom {
         }
 
         taskList[taskNum - 1].setMark(markStatus);
+        Storage.saveTasks(taskList);
         System.out.println(LINE_SEPARATOR);
         System.out.println("    " + (markStatus ? "Awesome! I've marked this task as done" : "Alright, this task has been unmarked") + ":");
         printTask(taskNum);
@@ -175,6 +178,9 @@ public class Atom {
         System.out.println("Hello from\n" + LOGO);
         printMessageWithLineSeperator("Hey hey there! Its your favourite chatbot assistant, Atom! :D\n" +
                 "    Is there anything I can help you with? Just let me know.");
+
+        Storage.loadTasks();
+
         while (true) {
 
             String line = receiveInput();
