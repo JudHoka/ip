@@ -9,10 +9,6 @@ public class AtomException {
         Atom.printMessageWithLineSeperator("Task list is empty! Please create one first.");
     }
 
-    public static void taskArrayFull() {
-        Atom.printMessageWithLineSeperator("Task list is full! You can't add more tasks.");
-    }
-
     public static void taskMissingDesc(String task) {
         switch (task) {
         case "t":
@@ -39,11 +35,13 @@ public class AtomException {
         }
     }
 
-    public static void markError(String error) {
-        if (error.equals("no number")) {
-            Atom.printMessageWithLineSeperator("Command must be followed by a valid task number.");
-        } else if (error.equals("out of bounds")) {
-            Atom.printMessageWithLineSeperator("Task number too large, please try again...");
+    public static void numError(String error) {
+        switch (error) {
+        case "no number" -> Atom.printMessageWithLineSeperator("Command must be followed by a valid task number.");
+        case "empty task list" -> Atom.printMessageWithLineSeperator("The list is empty, please create a task first...");
+        case "out of bounds" -> Atom.printMessageWithLineSeperator("Task number too large, please try again...");
+        case "invalid number format" -> Atom.printMessageWithLineSeperator("Invalid task number, please try again...");
         }
+
     }
 }

@@ -1,9 +1,9 @@
 package atom.ui;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Atom {
-    private static final int MAX_TASKS = 100;
     private static final String LINE_SEPARATOR = "  ____________________________________________________________";
 
     private static final String LOGO = """
@@ -13,25 +13,69 @@ public class Atom {
              / /    \\ \\ | |___| |__| || |\\/| | / \\  / \\ \s
             /_/      \\_\\ \\____|\\____/ |_|  |_|    \\/   \s
             """;
-    private static Tasks[] taskList = new Tasks[MAX_TASKS];
-    private static int taskCount = 0;
+    private static final ArrayList<Tasks> taskList = new ArrayList<>();
 
-    private static boolean isValidTaskCommand(String line) {
+    private static boolean isInvalidNumber(int taskNumber){
+        return taskNumber < 1 || taskNumber > taskList.size();
+    }
+
+    private static boolean isValidCreateTaskCommand(String line) {
         return line.startsWith("todo ") || line.startsWith("deadline ") || line.startsWith("event ");
     }
 
+    private static int parseInt(String line) {
+        try {
+            String[] words = line.split(" ");
+
+            if (words.length < 2) {
+                AtomException.numError("no number");
+                throw new NumberFormatException();
+            }
+
+            if (!words[1].matches("\\d+")) {
+                AtomException.numError("invalid number format");
+                throw new NumberFormatException();
+            }
+
+            int taskNum = Integer.parseInt(words[1]);
+
+            if (taskList.isEmpty()) {
+                AtomException.numError("empty task list");
+                throw new IllegalStateException();
+            }
+
+            if (taskNum > taskList.size() || taskNum <= 0) {
+                AtomException.numError("out of bounds");
+                throw new IndexOutOfBoundsException();
+            }
+
+            return taskNum;
+        } catch (NumberFormatException | IndexOutOfBoundsException | IllegalStateException e) {
+            return -1;
+        }
+    }
+
     private static void addTaskToList(Tasks task) {
-        if (taskCount >= MAX_TASKS) {
-            AtomException.taskArrayFull();
+        taskList.add(task);
+        System.out.println("    Nice! I've added this task:");
+        printTask(taskList.size());
+        System.out.println("    Now you have " + taskList.size() + " tasks in the list.");
+    }
+
+    private static void removeTaskFromList(String words) {
+        int taskNum = parseInt(words);
+
+        if(taskNum == -1){
             return;
         }
 
-        taskList[taskCount] = task;
-        taskCount++;
+        System.out.println(LINE_SEPARATOR);
+        System.out.println("    Got it. I have removed this task:");
+        printTask(taskNum);
+        taskList.remove(taskNum - 1);
+        System.out.println("    Now you have " + taskList.size() + " tasks in the list.");
+        System.out.println(LINE_SEPARATOR);
 
-        System.out.println("    Nice! I've added this task:");
-        printTask(taskCount);
-        System.out.println("    Now you have " + taskCount + " tasks in the list.");
     }
 
     private static void createTask(String line) {
@@ -55,7 +99,7 @@ public class Atom {
         }
     }
 
-    public static void createDeadline(String line) {
+    private static void createDeadline(String line) {
         String trimmedLine = line.substring(9).trim();
 
         if (trimmedLine.isEmpty()) {
@@ -75,7 +119,7 @@ public class Atom {
         }
     }
 
-    public static void createEvent(String line) {
+    private static void createEvent(String line) {
         String trimmedLine = line.substring(6).trim();
 
         if (trimmedLine.isEmpty()) {
@@ -96,34 +140,26 @@ public class Atom {
         }
     }
 
-    public static void markTask(String line, boolean markStatus) {
-        String[] words = line.split(" ");
+    private static void markTask(String line, boolean markStatus) {
+        int taskNum = parseInt(line);
 
-        if (words.length < 2 || !words[1].matches("\\d+")) {
-            AtomException.markError("no number");
+        if(taskNum == -1){
             return;
         }
 
-        int taskNum = Integer.parseInt(words[1]);
-        if (taskNum > taskCount) {
-            AtomException.markError("out of bounds");
-            return;
-        }
-
-        taskList[taskNum - 1].setMark(markStatus);
+        taskList.get(taskNum - 1).setMark(markStatus);
         System.out.println(LINE_SEPARATOR);
         System.out.println("    " + (markStatus ? "Awesome! I've marked this task as done" : "Alright, this task has been unmarked") + ":");
         printTask(taskNum);
         System.out.println(LINE_SEPARATOR);
-
     }
 
-    public static void printTask(int TaskNumber) {
-        System.out.print("    " + TaskNumber + ".[" + taskList[TaskNumber - 1].category + "][" + taskList[TaskNumber - 1].marked() + "] " + taskList[TaskNumber - 1].getName());
-        if (taskList[TaskNumber - 1].getCategory().equals("D")) {
-            System.out.println(" (by: " + ((Deadlines) taskList[TaskNumber - 1]).getBy() + ")");
-        } else if (taskList[TaskNumber - 1].getCategory().equals("E")) {
-            System.out.println(" (from: " + ((Events) taskList[TaskNumber - 1]).getFrom() + " to: " + ((Events) taskList[TaskNumber - 1]).getTo() + ")");
+    public static void printTask(int taskNum) {
+        System.out.print("    " + taskNum + ".[" + taskList.get(taskNum - 1).category + "][" + taskList.get(taskNum - 1).marked() + "] " + taskList.get(taskNum - 1).getName());
+        if (taskList.get(taskNum - 1).getCategory().equals("D")) {
+            System.out.println(" (by: " + ((Deadlines) taskList.get(taskNum - 1)).getBy() + ")");
+        } else if (taskList.get(taskNum - 1).getCategory().equals("E")) {
+            System.out.println(" (from: " + ((Events) taskList.get(taskNum - 1)).getFrom() + " to: " + ((Events) taskList.get(taskNum - 1)).getTo() + ")");
         } else {
             System.out.println();
         }
@@ -131,13 +167,13 @@ public class Atom {
     }
 
     public static void printList() {
-        if (taskCount == 0) {
+        if (taskList.isEmpty()) {
             AtomException.taskEmpty();
             return;
         }
         System.out.println(LINE_SEPARATOR);
         System.out.println("    Below will be the tasks in your list:");
-        for (int i = 1; i <= taskCount; i++) {
+        for (int i = 1; i <= taskList.size(); i++) {
             printTask(i);
         }
         System.out.println(LINE_SEPARATOR);
@@ -156,7 +192,10 @@ public class Atom {
             markTask(line, true);
         } else if (line.startsWith("unmark ")) {
             markTask(line, false);
-        } else if (isValidTaskCommand(line)) {
+        } else if(line.startsWith("remove ")) {
+            removeTaskFromList(line);
+        }
+        else if (isValidCreateTaskCommand(line)) {
             System.out.println(LINE_SEPARATOR);
             createTask(line);
             System.out.println(LINE_SEPARATOR);
