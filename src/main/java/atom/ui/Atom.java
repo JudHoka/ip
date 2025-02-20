@@ -1,11 +1,14 @@
 package atom.ui;
 
+import exceptions.AtomException;
+import storage.Storage;
+import task.*;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Atom {
     private static final String LINE_SEPARATOR = "  ____________________________________________________________";
-
     private static final String LOGO = """
                 ____     _                        /\\   \s
                / __ \\   | |__   ____   __  __  \\ /  \\ / \s
@@ -13,7 +16,7 @@ public class Atom {
              / /    \\ \\ | |___| |__| || |\\/| | / \\  / \\ \s
             /_/      \\_\\ \\____|\\____/ |_|  |_|    \\/   \s
             """;
-    private static final ArrayList<Tasks> taskList = new ArrayList<>();
+    public static final ArrayList<Tasks> taskList = new ArrayList<>();
 
     private static boolean isInvalidNumber(int taskNumber){
         return taskNumber < 1 || taskNumber > taskList.size();
@@ -60,6 +63,8 @@ public class Atom {
         System.out.println("    Nice! I've added this task:");
         printTask(taskList.size());
         System.out.println("    Now you have " + taskList.size() + " tasks in the list.");
+
+        Storage.saveTasks(taskList);
     }
 
     private static void removeTaskFromList(String words) {
@@ -95,7 +100,6 @@ public class Atom {
         if (taskDescription.isEmpty()) {
             AtomException.taskMissingDesc("t");
         } else {
-            Todo newTask = new Todo(taskDescription);
             Todo newTask = new Todo(taskDescription, false);
             addTaskToList(newTask);
         }
@@ -155,6 +159,7 @@ public class Atom {
         System.out.println("    " + (markStatus ? "Awesome! I've marked this task as done" : "Alright, this task has been unmarked") + ":");
         printTask(taskNum);
         System.out.println(LINE_SEPARATOR);
+        Storage.saveTasks(taskList);
     }
 
     public static void printTask(int taskNum) {

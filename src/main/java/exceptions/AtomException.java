@@ -1,11 +1,13 @@
-package atom.ui;
+package exceptions;
+
+import atom.ui.Atom;
 
 public class AtomException {
     public static void notImplemented() {
         Atom.printMessageWithLineSeperator("Sorry, I don't understand what you're trying to say...");
     }
 
-    public static void taskEmpty(){
+    public static void taskEmpty() {
         Atom.printMessageWithLineSeperator("Task list is empty! Please create one first.");
     }
 
@@ -43,5 +45,9 @@ public class AtomException {
         case "invalid number format" -> Atom.printMessageWithLineSeperator("Invalid task number, please try again...");
         }
 
+    }
+
+    public static void storageError(String message) {
+        System.out.println("Storage Error : " + message);
     }
 }

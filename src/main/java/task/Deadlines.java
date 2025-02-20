@@ -1,4 +1,4 @@
-package atom.ui;
+package task;
 
 public class Deadlines extends Tasks {
     private String by;

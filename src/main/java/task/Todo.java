@@ -1,4 +1,4 @@
-package atom.ui;
+package task;
 
 public class Todo extends Tasks {
     public Todo(String task, boolean mark) {

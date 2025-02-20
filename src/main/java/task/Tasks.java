@@ -1,9 +1,9 @@
-package atom.ui;
+package task;
 
 public abstract class Tasks {
-    protected String task;
-    protected boolean mark;
-    protected String category;
+    public String task;
+    public boolean mark;
+    public String category;
 
     public abstract String toFileFormat();
 

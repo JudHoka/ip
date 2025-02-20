@@ -1,6 +1,14 @@
-package atom.ui;
+package storage;
+
+import atom.ui.Atom;
+import exceptions.AtomException;
+import task.Deadlines;
+import task.Events;
+import task.Tasks;
+import task.Todo;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,7 +18,7 @@ public class Storage {
     private static final String DIRECTORY_PATH = "src/main/java/data";
     private static final String FILE_PATH = DIRECTORY_PATH + File.separator + "atom.txt";
 
-    public static void saveTasks(Tasks[] taskList) {
+    public static void saveTasks(ArrayList<Tasks> taskList) {
         try {
             Path directory = Paths.get(DIRECTORY_PATH);
             if (!Files.exists(directory)) {
@@ -19,17 +27,16 @@ public class Storage {
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH));
 
-            for (int i = 0; i < Atom.taskCount; i++) {
-                if (taskList[i] != null) {
-                    String formattedTask = taskList[i].toFileFormat();
-                    writer.write(formattedTask);
+            for (Tasks task : taskList) {
+                if (task != null) {
+                    writer.write(task.toFileFormat());
                     writer.newLine();
                 }
             }
 
             writer.close();
         } catch (IOException e) {
-            System.out.println("Error saving tasks: " + e.getMessage());
+            AtomException.storageError("Error saving tasks: " + e.getMessage());
         }
     }
 
@@ -45,13 +52,12 @@ public class Storage {
                 String line = scanner.nextLine();
                 Tasks task = parseTask(line);
                 if (task != null) {
-                    Atom.taskList[Atom.taskCount] = task;
-                    Atom.taskCount++;
+                    Atom.taskList.add(task);
                 }
             }
             scanner.close();
         } catch (IOException e) {
-            System.out.println("Error loading tasks: " + e.getMessage());
+            AtomException.storageError("Error loading tasks: " + e.getMessage());
         }
     }
 
@@ -62,24 +68,18 @@ public class Storage {
             boolean isDone = parts[1].equals("1");
             String description = parts[2];
 
-            switch (type) {
-            case "T" -> {
-                return new Todo(description, isDone);
-            }
-            case "D" -> {
-                return new Deadlines(description, parts[3], isDone);
-            }
-            case "E" -> {
-                return new Events(description, parts[3], parts[4], isDone);
-            }
-            default -> {
-                return null;
-            }
-            }
+            return switch (type) {
+                case "T" -> new Todo(description, isDone);
+                case "D" -> new Deadlines(description, parts[3], isDone);
+                case "E" -> new Events(description, parts[3], parts[4], isDone);
+                default -> {
+                    AtomException.storageError("Unknown task type: " + type);
+                    yield null;
+                }
+            };
         } catch (Exception e) {
-            System.out.println("Skipping corrupted line: " + line);
+            AtomException.storageError("Skipping corrupted line: " + line);
             return null;
         }
     }
 }
-
