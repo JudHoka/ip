@@ -1,14 +1,18 @@
 package exceptions;
 
-import atom.ui.Atom;
+import misc.Others;
 
-public class AtomException {
+public class AtomException extends Exception { // Change from Throwable to Exception
+    public AtomException(String message) { // Constructor to accept a message
+        super(message);
+    }
+
     public static void notImplemented() {
-        Atom.printMessageWithLineSeperator("Sorry, I don't understand what you're trying to say...");
+        Others.printMessageWithLineSeperator("Sorry, I don't understand what you're trying to say...");
     }
 
     public static void taskEmpty() {
-        Atom.printMessageWithLineSeperator("Task list is empty! Please create one first.");
+        Others.printMessageWithLineSeperator("Task list is empty! Please create one first.");
     }
 
     public static void taskMissingDesc(String task) {
@@ -39,15 +43,20 @@ public class AtomException {
 
     public static void numError(String error) {
         switch (error) {
-        case "no number" -> Atom.printMessageWithLineSeperator("Command must be followed by a valid task number.");
-        case "empty task list" -> Atom.printMessageWithLineSeperator("The list is empty, please create a task first...");
-        case "out of bounds" -> Atom.printMessageWithLineSeperator("Task number too large, please try again...");
-        case "invalid number format" -> Atom.printMessageWithLineSeperator("Invalid task number, please try again...");
+        case "no number" -> Others.printMessageWithLineSeperator("Command must be followed by a valid task number.");
+        case "empty task list" ->
+                Others.printMessageWithLineSeperator("The list is empty, please create a task first...");
+        case "out of bounds" -> Others.printMessageWithLineSeperator("Task number too large, please try again...");
+        case "invalid number format" ->
+                Others.printMessageWithLineSeperator("Invalid task number, please try again...");
         }
-
     }
 
     public static void storageError(String message) {
-        System.out.println("Storage Error : " + message);
+        Others.printMessageWithLineSeperator("Storage Error: " + message);
+    }
+
+    public static void loadingError() {
+        Others.printMessageWithLineSeperator("Unable to load data...");
     }
 }
