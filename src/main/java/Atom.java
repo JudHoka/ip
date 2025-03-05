@@ -7,13 +7,10 @@ import misc.*;
 public class Atom {
 
     private Storage storage;
-    private TaskList tasks;
-    private Commands ui;
 
     public Atom(String filePath) {
-        ui = new Commands();
         storage = new Storage(filePath);
-        tasks = new TaskList(storage.loadTasks());
+        new TaskList(storage.loadTasks());
     }
 
     public void run() {

@@ -1,0 +1,3 @@
+D | 1 | something | 12-12-2005 (16:00)
+T | 0 | something
+D | 0 | something | 12-03-2025 (00:00)
