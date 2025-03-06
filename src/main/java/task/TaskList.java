@@ -4,6 +4,7 @@ import exceptions.AtomException;
 import storage.Storage;
 import misc.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class TaskList {
@@ -75,7 +76,10 @@ public class TaskList {
                 AtomException.taskIncomplete("d");
             } else {
                 String taskDescription = parts[0].trim();
-                String deadline = parts[1].trim();
+                LocalDateTime deadline = Parser.parseTime(parts[1].trim());
+
+                if (deadline == null) return;
+
 
                 Deadlines newTask = new Deadlines(taskDescription, deadline, false);
                 addTaskToList(newTask);
@@ -95,8 +99,10 @@ public class TaskList {
                 AtomException.taskIncomplete("e");
             } else {
                 String taskDescription = parts[0].trim();
-                String from = parts[1].trim();
-                String to = parts[2].trim();
+                LocalDateTime from = Parser.parseTime(parts[1]);
+                LocalDateTime to = Parser.parseTime(parts[2]);
+
+                if (from == null || to == null) return;
 
                 Events newTask = new Events(taskDescription, from, to, false);
                 addTaskToList(newTask);

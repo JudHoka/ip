@@ -1,25 +1,31 @@
 package task;
 
-public class Events extends Tasks {
-    private String from;
-    private String to;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Events(String task, String from, String to, boolean mark) {
+public class Events extends Tasks {
+    private LocalDateTime from;
+    private LocalDateTime to;
+
+    public Events(String task, LocalDateTime from, LocalDateTime to, boolean mark) {
         super(task, "E", mark);
         this.from = from;
         this.to = to;
     }
 
     public String getFrom() {
-        return from;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy (HH:mm)");
+        return from.format(formatter);
     }
 
     public String getTo() {
-        return to;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy (HH:mm)");
+        return to.format(formatter);
     }
 
     @Override
     public String toFileFormat() {
-        return "E | " + (mark ? "1" : "0") + " | " + task + " | " + from + " | " + to;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy (HH:mm)");
+        return "E | " + (mark ? "1" : "0") + " | " + task + " | " + from.format(formatter) + " | " + to.format(formatter);
     }
 }
