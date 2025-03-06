@@ -1,6 +1,11 @@
 package misc;
 
 import exceptions.AtomException;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import task.*;
 
 /**
@@ -50,29 +55,80 @@ public class Parser {
     }
 
     /**
-     * Parses a stored task entry from a file and reconstructs the task object.
-     * It supports the different type tasks: Todo, Deadline, Event.
-     * If the format is invalid, it prints an error and skips the corrupted line.
+     * Parses a date-time string into a {@code LocalDateTime} object.
+     * The expected format is {@code dd-MM-yyyy (HH:mm)}, where the date and time are
+     * separated, and the time is enclosed in parentheses.
      *
-     * @param line A line from the storage file representing a task.
+     * @param dateTime The input date-time string to be parsed.
+     * @return A {@code LocalDateTime} object if parsing is successful, or {@code null} if the format is invalid.
+     */
+    public static LocalDateTime parseTime(String dateTime) {
+        try {
+            // Extract date and time parts
+            String datePart = dateTime.split(" ")[0];
+            String timePart = dateTime.substring(dateTime.indexOf("(") + 1, dateTime.indexOf(")"));
+
+            // Define the expected format
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+            // Parse and return the LocalDateTime object
+            return LocalDateTime.parse(datePart + " " + timePart, formatter);
+        } catch (DateTimeParseException | IndexOutOfBoundsException e) {
+            // Handle invalid or incomplete date-time input
+            AtomException.dateParseError(dateTime);
+            return null;
+        }
+    }
+
+    /**
+     * Parses a stored task entry from a file and reconstructs the corresponding task object.
+     * It supports different types of tasks: {@code Todo}, {@code Deadlines}, and {@code Events}.
+     * If the format is invalid or missing required data, an error is printed, and the task is skipped.
+     *
+     * @param line A line from the storage file representing a task in the format:
+     *             {@code Type | Status | Description | Date & Time (except Todo)}.
      * @return The parsed {@code Tasks} object, or {@code null} if the line is corrupted.
      */
     public static Tasks parseTask(String line) {
         String[] parts = line.split(" \\| ");
-        try {
-            String type = parts[0];
-            boolean isDone = parts[1].equals("1");
-            String description = parts[2];
 
-            return switch (type) {
-                case "T" -> new Todo(description, isDone);
-                case "D" -> new Deadlines(description, parts[3], isDone);
-                case "E" -> new Events(description, parts[3], parts[4], isDone);
-                default -> {
-                    AtomException.storageError("Unknown task type: " + type);
-                    yield null;
+        if (parts.length < 3) {
+            AtomException.storageError("Skipping corrupted line: " + line);
+            return null;
+        }
+
+        try {
+            String type = parts[0].trim();
+            boolean isDone = parts[1].trim().equals("1");
+            String description = parts[2].trim();
+
+            switch (type) {
+            case "T":
+                return new Todo(description, isDone);
+
+            case "D":
+                if (parts.length < 4) {
+                    AtomException.storageError("Skipping corrupted deadline: " + line);
+                    return null;
                 }
-            };
+                LocalDateTime by = parseTime(parts[3].trim());
+                if (by == null) return null;
+                return new Deadlines(description, by, isDone);
+
+            case "E":
+                if (parts.length < 5) {
+                    AtomException.storageError("Skipping corrupted event: " + line);
+                    return null;
+                }
+                LocalDateTime from = parseTime(parts[3].trim());
+                LocalDateTime to = parseTime(parts[4].trim());
+                if (from == null || to == null) return null;
+                return new Events(description, from, to, isDone);
+
+            default:
+                AtomException.storageError("Unknown task type: " + type);
+                return null;
+            }
         } catch (Exception e) {
             AtomException.storageError("Skipping corrupted line: " + line);
             return null;

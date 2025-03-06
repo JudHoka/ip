@@ -4,6 +4,7 @@ import exceptions.AtomException;
 import storage.Storage;
 import misc.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -107,7 +108,10 @@ public class TaskList {
                 AtomException.taskIncomplete("d");
             } else {
                 String taskDescription = parts[0].trim();
-                String deadline = parts[1].trim();
+                LocalDateTime deadline = Parser.parseTime(parts[1].trim());
+
+                if (deadline == null) return;
+
 
                 Deadlines newTask = new Deadlines(taskDescription, deadline, false);
                 addTaskToList(newTask);
@@ -132,8 +136,10 @@ public class TaskList {
                 AtomException.taskIncomplete("e");
             } else {
                 String taskDescription = parts[0].trim();
-                String from = parts[1].trim();
-                String to = parts[2].trim();
+                LocalDateTime from = Parser.parseTime(parts[1]);
+                LocalDateTime to = Parser.parseTime(parts[2]);
+
+                if (from == null || to == null) return;
 
                 Events newTask = new Events(taskDescription, from, to, false);
                 addTaskToList(newTask);
@@ -193,6 +199,50 @@ public class TaskList {
         System.out.println("    Below will be the tasks in your list:");
         for (int i = 1; i <= taskList.size(); i++) {
             printTask(i);
+        }
+        System.out.println(Others.LINE_SEPARATOR);
+    }
+
+    /**
+     * Checks if a given task contains the search keyword and prints it if found.
+     * If a match is found, it increments the count and prints the task at the given index.
+     *
+     * @param task   The task being checked.
+     * @param search The keyword to search for in the task name.
+     * @param count  The current count of matched tasks.
+     * @param index  The position of the task in the task list.
+     * @return The updated count of matched tasks.
+     */
+    public static int checkTask(Tasks task, String search, int count, int index){
+        if (task.getName().contains(search)) {
+            if (count == 0) System.out.println("    Here are the task(s) that matches your search \"" + search + "\" :");
+            printTask(index);
+            return count + 1;
+        }
+        return count;
+    }
+
+    /**
+     * Searches for tasks that contain a specified keyword and displays the results.
+     * If no tasks match the keyword, an appropriate message is displayed.
+     *
+     * @param line The user input containing the search command and keyword.
+     */
+    public static void findTask (String line){
+        String search = line.substring(5).trim();
+        int index = 1;
+        int count = 0;
+
+        System.out.println(Others.LINE_SEPARATOR);
+        for (Tasks task : taskList) {
+            count = checkTask(task, search, count, index);
+            index++;
+        }
+        if(count == 0){
+            System.out.println("    Sorry, there are no tasks that matches your search......");
+        }
+        else{
+            System.out.println("    There are " + count + " task(s) that matches your search");
         }
         System.out.println(Others.LINE_SEPARATOR);
     }

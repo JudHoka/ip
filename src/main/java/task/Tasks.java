@@ -25,7 +25,6 @@ public abstract class Tasks {
      */
     public String marked() {
         return (mark) ? "X" : " ";
-
     }
 
     /**
