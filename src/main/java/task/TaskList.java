@@ -174,7 +174,7 @@ public class TaskList {
             System.out.println("    Sorry, there are no tasks that matches your search......");
         }
         else{
-            System.out.println("    There are " + count + " tasks that matches your search");
+            System.out.println("    There are " + count + " task(s) that matches your search");
         }
         System.out.println(Others.LINE_SEPARATOR);
     }
