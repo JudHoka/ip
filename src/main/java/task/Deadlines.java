@@ -1,20 +1,24 @@
 package task;
 
-public class Deadlines extends Tasks {
-    private String by;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Deadlines(String task, String deadline, boolean mark) {
+public class Deadlines extends Tasks {
+    private LocalDateTime by;
+
+    public Deadlines(String task, LocalDateTime deadline, boolean mark) {
         super(task, "D", mark);
         this.by = deadline;
     }
 
     public String getBy() {
-        return by;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy (HH:mm)");
+        return by.format(formatter);
     }
 
     @Override
     public String toFileFormat() {
-        return "D | " + (mark ? "1" : "0") + " | " + task + " | " + by;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy (HH:mm)");
+        return "D | " + (mark ? "1" : "0") + " | " + task + " | " + by.format(formatter);
     }
-
 }

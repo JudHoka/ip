@@ -2,10 +2,7 @@ package exceptions;
 
 import misc.Others;
 
-public class AtomException extends Exception { // Change from Throwable to Exception
-    public AtomException(String message) { // Constructor to accept a message
-        super(message);
-    }
+public class AtomException extends Exception {
 
     public static void notImplemented() {
         Others.printMessageWithLineSeperator("Sorry, I don't understand what you're trying to say...");
@@ -56,7 +53,12 @@ public class AtomException extends Exception { // Change from Throwable to Excep
         Others.printMessageWithLineSeperator("Storage Error: " + message);
     }
 
-    public static void loadingError() {
-        Others.printMessageWithLineSeperator("Unable to load data...");
+    public static void dateTimeError(String message) {
+        Others.printMessageWithLineSeperator("DateTime Error: " + message);
+    }
+
+    public static void dateParseError(String dateTime) {
+        System.out.println("    Sorry, the date/time format is invalid or incomplete : " + dateTime + "\n" +
+        "    Please ensure the format is: dd-MM-yyyy (HH:mm)");
     }
 }
