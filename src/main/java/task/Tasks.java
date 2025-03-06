@@ -8,11 +8,7 @@ public abstract class Tasks {
     public abstract String toFileFormat();
 
     public String marked() {
-        if (mark) {
-            return "X";
-        } else {
-            return " ";
-        }
+        return (mark) ? "X" : " ";
     }
 
     public Tasks(String name, String category, boolean mark

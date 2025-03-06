@@ -150,4 +150,32 @@ public class TaskList {
         }
         System.out.println(Others.LINE_SEPARATOR);
     }
+
+    public static int checkTask(Tasks task, String search, int count, int index){
+        if (task.getName().contains(search)) {
+            if (count == 0) System.out.println("    Here are the task(s) that matches your search \"" + search + "\" :");
+            printTask(index);
+            return count + 1;
+        }
+        return count;
+    }
+
+    public static void findTask (String line){
+        String search = line.substring(5).trim();
+        int index = 1;
+        int count = 0;
+
+        System.out.println(Others.LINE_SEPARATOR);
+        for (Tasks task : taskList) {
+            count = checkTask(task, search, count, index);
+            index++;
+        }
+        if(count == 0){
+            System.out.println("    Sorry, there are no tasks that matches your search......");
+        }
+        else{
+            System.out.println("    There are " + count + " tasks that matches your search");
+        }
+        System.out.println(Others.LINE_SEPARATOR);
+    }
 }
