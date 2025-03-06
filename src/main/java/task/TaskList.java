@@ -6,16 +6,28 @@ import misc.*;
 
 import java.util.ArrayList;
 
+/**
+ * The {@code TaskList} class manages a collection of tasks, including adding, removing,
+ * marking tasks as completed, and displaying task details. It also interacts with storage
+ * to persist tasks and provides utility methods for handling different task types.
+ */
 public class TaskList {
     public static ArrayList<Tasks> taskList;
-    private static boolean isInvalidNumber(int taskNumber) {
-        return taskNumber < 1 || taskNumber > taskList.size();
-    }
 
+    /**
+     * Constructs a {@code TaskList} object and initializes the task list.
+     *
+     * @param list The list of tasks to be managed.
+     */
     public TaskList(ArrayList<Tasks> list) {
         taskList = new ArrayList<>(list) ;
     }
 
+    /**
+     * Adds a task to the task list and saves the updated list.
+     *
+     * @param task The task to be added.
+     */
     public static void addTaskToList(Tasks task) {
         taskList.add(task);
         System.out.println("    Nice! I've added this task:");
@@ -25,6 +37,11 @@ public class TaskList {
         Storage.saveTasks(taskList);
     }
 
+    /**
+     * Removes a task from the task list based on the given input number.
+     *
+     * @param words The input string containing the task number to be removed.
+     */
     public static void removeTaskFromList(String words) {
         int taskNum = Parser.parseInt(words);
 
@@ -42,6 +59,11 @@ public class TaskList {
         Storage.saveTasks(taskList);
     }
 
+    /**
+     * Creates a new task and chooses between the three categories based on the given user input.
+     *
+     * @param line The command entered by the user to create a task.
+     */
     public static void createTask(String line) {
         if (line.startsWith("todo ")) {
             createTodo(line);
@@ -52,6 +74,11 @@ public class TaskList {
         }
     }
 
+    /**
+     * Creates a new Todo task.
+     *
+     * @param line The command containing the todo task details.
+     */
     public static void createTodo(String line) {
         String taskDescription = line.substring(5).trim();
 
@@ -63,6 +90,11 @@ public class TaskList {
         }
     }
 
+    /**
+     * Creates a new Deadline task.
+     *
+     * @param line The command containing the deadline task details.
+     */
     public static void createDeadline(String line) {
         String trimmedLine = line.substring(9).trim();
 
@@ -83,6 +115,11 @@ public class TaskList {
         }
     }
 
+    /**
+     * Creates a new Event task.
+     *
+     * @param line The command containing the event task details.
+     */
     public static void createEvent(String line) {
         String trimmedLine = line.substring(6).trim();
 
@@ -104,6 +141,12 @@ public class TaskList {
         }
     }
 
+    /**
+     * Marks or unmarks a task as completed.
+     *
+     * @param line       The command containing the task number.
+     * @param markStatus {@code true} to mark the task as done, {@code false} to unmark it.
+     */
     public static void markTask(String line, boolean markStatus) {
         int taskNum = Parser.parseInt(line);
 
@@ -120,6 +163,11 @@ public class TaskList {
         Storage.saveTasks(taskList);
     }
 
+    /**
+     * Prints the details of a specific task.
+     *
+     * @param taskNum The task number to be printed.
+     */
     public static void printTask(int taskNum) {
         System.out.print("    " + taskNum + ".[" + taskList.get(taskNum - 1).category + "][" + taskList.get(taskNum - 1).marked() + "] " + taskList.get(taskNum - 1).getName());
         if (taskList.get(taskNum - 1).getCategory().equals("D")) {
@@ -132,6 +180,10 @@ public class TaskList {
 
     }
 
+    /**
+     * Prints the entire list of tasks.
+     * If the task list is empty, an error message is displayed.
+     */
     public static void printList() {
         if (taskList.isEmpty()) {
             AtomException.taskEmpty();

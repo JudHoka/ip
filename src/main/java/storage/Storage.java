@@ -11,15 +11,30 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+/**
+ * The {@code Storage} class handles reading and writing task data to a file.
+ * It ensures that tasks persist between program executions by saving and loading data.
+ */
 public class Storage {
-    private static String directoryPath;
-    private static String filePath;
+    private static String directoryPath; // The directory where task data is stored
+    private static String filePath;      // The file path for saving and loading tasks
 
+    /**
+     * Constructs a {@code Storage} instance with the specified directory.
+     * The task data is stored in a file named "atom.txt" inside the given directory.
+     *
+     * @param directory The directory where the task file is stored.
+     */
     public Storage(String directory) {
         directoryPath = directory;
         filePath = directory + File.separator + "atom.txt";
     }
 
+    /**
+     * Saves the list of tasks to a file. If the directory does not exist, it creates one.
+     *
+     * @param taskList The list of tasks to be saved.
+     */
     public static void saveTasks(ArrayList<Tasks> taskList) {
         try {
             Path directory = Paths.get(directoryPath);
@@ -42,6 +57,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads tasks from a file and returns them as an {@code ArrayList<Tasks>}.
+     * If the file does not exist, it returns an empty task list.
+     *
+     * @return A list of tasks loaded from the file.
+     */
     public static ArrayList<Tasks> loadTasks() {
         ArrayList<Tasks> list = new ArrayList<>();
         try {
