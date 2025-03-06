@@ -18,7 +18,10 @@ public class Commands {
             TaskList.markTask(line, false);
         } else if (line.startsWith("remove ")) {
             TaskList.removeTaskFromList(line);
-        } else if (isValidCreateTaskCommand(line)) {
+        } else if (line.startsWith("find ")) {
+            TaskList.findTask(line);
+        }
+        else if (isValidCreateTaskCommand(line)) {
             System.out.println(Others.LINE_SEPARATOR);
             TaskList.createTask(line);
             System.out.println(Others.LINE_SEPARATOR);
