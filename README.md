@@ -1,26 +1,198 @@
-# Atom project template
+# Atom User Guide
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+## Introduction
 
-## Setting up in Intellij
+Welcome to **Atom**, your intelligent chatbot assistant! 
+Atom is designed to help users manage their tasks efficiently using simple text-based commands. 
+With Atom, you can add, remove, mark, unmark, and search for tasks with ease.
 
-Prerequisites: JDK 17, update Intellij to the most recent version.
+## Features
 
-1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into Intellij as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/Atom.java` file, right-click it, and choose `Run Atom.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+### 1. Adding a To-Do Task
+Create a simple to-do task without deadlines or time constraints.
 
-**Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+**Usage:**
+```
+todo TASK_DESCRIPTION
+```
+
+**Example:**
+```
+todo iP Level-0 CS2113
+```
+
+**Expected Output:**
+```
+    Nice! I've added this task:
+    [T][ ] iP Level-0 CS2113
+    Now you have 1 task in the list.
+```
+
+---
+
+### 2. Adding a Deadline Task
+Create a task with a specified deadline.
+
+**Usage:**
+```
+deadline TASK_DESCRIPTION /by dd-MM-yyyy (HH:mm)
+```
+
+**Example:**
+```
+deadline Weekly Java Quiz /by 07-02-2025 (16:00)
+```
+
+**Expected Output:**
+```
+    Nice! I've added this task:
+    [D][ ] Weekly Java Quiz (by: 07-02-2025 (16:00))
+    Now you have 2 tasks in the list.
+```
+
+---
+
+### 3. Adding an Event Task
+Create an event task that includes a start and end time.
+
+**Usage:**
+```
+event TASK_DESCRIPTION /from dd-MM-yyyy (HH:mm) /to dd-MM-yyyy (HH:mm)
+```
+
+**Example:**
+```
+event tP Team meeting /from 12-03-2025 (10:00) /to 12-03-2025 (11:00)
+```
+
+**Expected Output:**
+```
+    Nice! I've added this task:
+    [E][ ] tP Team meeting (from: 12-03-2025 10:00 to: 12-03-2025 11:00)
+    Now you have 3 tasks in the list.
+```
+
+---
+
+### 4. Listing All Tasks
+Display all tasks currently stored in the chatbot.
+
+**Usage:**
+```
+list
+```
+
+**Expected Output:**
+```
+    Below are the tasks in your list:
+    1. [T][ ] iP Level-0 CS2113
+    2. [D][ ] Weekly Java Quiz (by: 07-02-2025 (16:00))
+    3. [E][ ] Team meeting (from: 12-03-2025 10:00 to: 12-03-2025 11:00)
+```
+
+---
+
+### 5. Marking a Task as Done
+Mark a specific task as completed.
+
+**Usage:**
+```
+mark TASK_NUMBER
+```
+
+**Example:**
+```
+mark 1
+```
+
+**Expected Output:**
+```
+    Awesome! I've marked this task as done:
+    [T][X] iP Level-0 CS2113
+```
+
+---
+
+### 6. Unmarking a Task
+Unmark a previously marked task as incomplete.
+
+**Usage:**
+```
+unmark TASK_NUMBER
+```
+
+**Example:**
+```
+unmark 1
+```
+
+**Expected Output:**
+```
+    Alright, this task has been unmarked:
+    [T][ ] iP Level-0 CS2113
+```
+
+---
+
+### 7. Removing a Task
+Delete a specific task from the list.
+
+**Usage:**
+```
+remove TASK_NUMBER
+```
+
+**Example:**
+```
+remove 2
+```
+
+**Expected Output:**
+```
+    Got it. I have removed this task:
+    [D][ ] Weekly Java Quiz (by: 07-02-2025 (16:00))
+    Now you have 2 tasks in the list.
+```
+
+---
+
+### 8. Finding Tasks by Keyword
+Search for tasks that contain a specific keyword.
+
+**Usage:**
+```
+find SEARCH_KEYWORD
+```
+
+**Example:**
+```
+find meeting
+```
+
+**Expected Output:**
+```
+    Here are the task(s) that match your search "meeting":
+    2. [E][ ] Team meeting (from: 12-03-2025 10:00 to: 12-03-2025 11:00)
+    There is 1 task that matches your search.
+```
+
+---
+
+### 9. Exiting the Chatbot
+End the chatbot session.
+
+**Usage:**
+```
+bye
+```
+
+**Expected Output:**
+```
+    Alright, I'll catch ya next time. Have a nice day!
+```
+
+---
+
+
+## Conclusion
+This User Guide provides everything needed to efficiently use **Atom**. If you encounter issues, refer to the **error messages** displayed by the chatbot for guidance. Happy task managing! 🎯
