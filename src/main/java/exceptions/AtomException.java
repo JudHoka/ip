@@ -91,6 +91,6 @@ public class AtomException extends Exception {
      */
     public static void dateParseError(String dateTime) {
         System.out.println("    Sorry, the date/time format is invalid or incomplete : " + dateTime + "\n" +
-        "    Please ensure the format is: dd-MM-yyyy (HH:mm)");
+                "    Please ensure the format is: dd-MM-yyyy (HH:mm)");
     }
 }

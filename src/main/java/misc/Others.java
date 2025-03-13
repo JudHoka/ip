@@ -8,10 +8,14 @@ import java.util.Scanner;
  */
 public class Others {
 
-    /** A constant for the line separator used in output formatting. */
+    /**
+     * A constant for the line separator used in output formatting.
+     */
     public static final String LINE_SEPARATOR = "  ____________________________________________________________";
 
-    /** The logo for the chatbot displayed at startup. */
+    /**
+     * The logo for the chatbot displayed at startup.
+     */
     public static final String LOGO = """
                 ____     _                        /\\   \s
                / __ \\   | |__   ____   __  __  \\ /  \\ / \s

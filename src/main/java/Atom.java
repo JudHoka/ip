@@ -37,8 +37,7 @@ public class Atom {
 
             if (line.equals("bye")) {
                 isContinue = false; // Exit the chatbot when "bye" is entered
-            }
-            else {
+            } else {
                 Commands.processCommand(line); // Process user command
             }
         }

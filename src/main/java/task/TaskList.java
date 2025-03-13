@@ -21,7 +21,7 @@ public class TaskList {
      * @param list The list of tasks to be managed.
      */
     public TaskList(ArrayList<Tasks> list) {
-        taskList = new ArrayList<>(list) ;
+        taskList = new ArrayList<>(list);
     }
 
     /**
@@ -213,9 +213,10 @@ public class TaskList {
      * @param index  The position of the task in the task list.
      * @return The updated count of matched tasks.
      */
-    public static int checkTask(Tasks task, String search, int count, int index){
+    public static int checkTask(Tasks task, String search, int count, int index) {
         if (task.getName().contains(search)) {
-            if (count == 0) System.out.println("    Here are the task(s) that matches your search \"" + search + "\" :");
+            if (count == 0)
+                System.out.println("    Here are the task(s) that matches your search \"" + search + "\" :");
             printTask(index);
             return count + 1;
         }
@@ -228,7 +229,7 @@ public class TaskList {
      *
      * @param line The user input containing the search command and keyword.
      */
-    public static void findTask (String line){
+    public static void findTask(String line) {
         String search = line.substring(5).trim();
         int index = 1;
         int count = 0;
@@ -238,10 +239,9 @@ public class TaskList {
             count = checkTask(task, search, count, index);
             index++;
         }
-        if(count == 0){
+        if (count == 0) {
             System.out.println("    Sorry, there are no tasks that matches your search......");
-        }
-        else{
+        } else {
             System.out.println("    There are " + count + " task(s) that matches your search");
         }
         System.out.println(Others.LINE_SEPARATOR);

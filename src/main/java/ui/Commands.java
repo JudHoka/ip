@@ -16,7 +16,7 @@ public class Commands {
      *
      * @param line The task input command entered by the user.
      * @return {@code true} if the command is a valid task creation command (todo, deadline, event),
-     *         {@code false} otherwise.
+     * {@code false} otherwise.
      */
     private static boolean isValidCreateTaskCommand(String line) {
         return line.startsWith("todo ") || line.startsWith("deadline ") || line.startsWith("event ");
@@ -40,8 +40,7 @@ public class Commands {
             TaskList.removeTaskFromList(line);
         } else if (line.startsWith("find ")) {
             TaskList.findTask(line);
-        }
-        else if (isValidCreateTaskCommand(line)) {
+        } else if (isValidCreateTaskCommand(line)) {
             System.out.println(Others.LINE_SEPARATOR);
             TaskList.createTask(line);
             System.out.println(Others.LINE_SEPARATOR);

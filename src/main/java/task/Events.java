@@ -49,7 +49,7 @@ public class Events extends Tasks {
      * Converts the {@code Events} task into a formatted LocalDateTime suitable for storage.
      *
      * @return A string representation of the task in the format:
-     *         {@code E | 1/0 | task description | from | to}.
+     * {@code E | 1/0 | task description | from | to}.
      */
     @Override
     public String toFileFormat() {
